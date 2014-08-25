@@ -18,7 +18,9 @@ public class RegisterScreen extends Activity{
 	private char[] character = new char[20];
 	private char invisibleBit;
 	Spinner genderSpinner;
+	Spinner ageSpinner;
 	private String gender;
+	private String age;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,6 +33,8 @@ public class RegisterScreen extends Activity{
 		setTextField();
 		genderSpinner = (Spinner)findViewById(R.id.genderSpinner);
 		gender = genderSpinner.getSelectedItem().toString();
+		ageSpinner = (Spinner)findViewById(R.id.ageSpinner);
+		age = ageSpinner.getSelectedItem().toString();
 	}
 	private void setButtons() {
 		signUp = (Button)findViewById(R.id.signUp);
