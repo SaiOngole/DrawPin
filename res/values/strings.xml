@@ -10,5 +10,11 @@
     <string name="gender1">Male</string>
     <string name="gender2">Female</string>
     <string name="gender3">Not Specified</string>
+    <string name="age1">18-24</string>
+    <string name="age2">25-30</string>
+    <string name="age3">31-35</string>
+    <string name="age4">36-40</string>
+    <string name="age5">41-45</string>
+    <string name="age6">45+</string>
 
 </resources>
