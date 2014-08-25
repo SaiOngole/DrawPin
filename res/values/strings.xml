@@ -7,5 +7,8 @@
     <string name="username">Username</string>
     <string name="entername">Enter username here</string>
     <string name="login">Login</string>
+    <string name="gender1">Male</string>
+    <string name="gender2">Female</string>
+    <string name="gender3">Not Specified</string>
 
 </resources>

@@ -1,5 +1,9 @@
 package com.is3av.drawpin;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -8,7 +12,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,8 +29,18 @@ public class DrawingView extends View {
 	Context context;
 	private Paint circlePaint;
 	private Path circlePath;
+	private int counter=0;
+	private int digit=0;
 	ArrayList<Float> pressureList = new ArrayList<Float>();
 	ArrayList<Float> sizeList = new ArrayList<Float>();
+	ArrayList<Float> xCo = new ArrayList<Float>();
+	ArrayList<Float> yCo = new ArrayList<Float>();
+	ArrayList<Long> timeStamp = new ArrayList<Long>();
+	String root = android.os.Environment.getExternalStorageDirectory().toString();
+	File mydir = new File(root+"/digit");
+	
+	public int custom;
+
 
 	public DrawingView(Context c) {
 		super(c);
@@ -44,6 +60,8 @@ public class DrawingView extends View {
 		mPaint = new Paint();
 		mPaint.setAntiAlias(true);
 		mPaint.setDither(true);
+		System.out.println("Setting color to be "+custom);
+		//mPaint.setColor(custom);
 		mPaint.setColor(Color.GREEN);  //use a variable to set the color
 		mPaint.setStyle(Paint.Style.STROKE);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -60,7 +78,19 @@ public class DrawingView extends View {
 		circlePaint.setStrokeJoin(Paint.Join.MITER);
 		circlePaint.setStrokeWidth(4f); 
 
+
 	}
+	/*public void colorSet(int bit) {
+		if(bit==0) {
+			System.out.println("Bit is "+bit);
+			custom = Color.GREEN;
+			
+		}
+		else {
+			System.out.println("Bit is "+bit);
+			custom = Color.BLACK;
+		}
+	} */
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
@@ -117,28 +147,45 @@ public class DrawingView extends View {
 		float y = event.getY();
 		float pressure;
 		float size;
+		float time;
 
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			pressure = event.getPressure();
 			size = event.getSize();
 			touch_start(x, y);
+			time = SystemClock.uptimeMillis();
+			long t = (long) time;
+			xCo.add(x);
+			yCo.add(y);
 			pressureList.add(pressure);
 			sizeList.add(size);
+			timeStamp.add(t);
 			invalidate();
 			break;
 		case MotionEvent.ACTION_MOVE:
 			pressure = event.getPressure();
 			size = event.getSize();
 			touch_move(x, y);
+			//time = event.getEventTime()-event.getDownTime();
+			time = SystemClock.uptimeMillis();
+			 t = (long) time;
+			timeStamp.add(t);
+			xCo.add(x);
+			yCo.add(y);
 			pressureList.add(pressure);
 			sizeList.add(size);
 			invalidate();
 			break;
 		case MotionEvent.ACTION_UP:
-			pressure = event.getPressure();
+			pressure = event.getPressure()-event.getDownTime();
 			size = event.getSize();
+			time = SystemClock.uptimeMillis();
+			 t = (long) (time);
 			touch_up();
+			timeStamp.add(t);
+			xCo.add(x);
+			yCo.add(y);
 			pressureList.add(pressure);
 			sizeList.add(size);
 			invalidate();
@@ -151,14 +198,49 @@ public class DrawingView extends View {
 		mCanvas.drawColor(Color.BLACK);
 		invalidate();
 	}  
-	public void saveCanvas() {
-		//save it in a file on sd card or DB
-		//upload the arrayLists to server
-		clearCanvas();
+	public void saveCanvas() throws FileNotFoundException {
+		
+		String filename = "-"+ counter + "-" + digit+".txt"; 
+		File mydir1 = new File(mydir+File.separator);
+		mydir1.mkdirs();
+		Log.d("location",mydir1.toString());
+		File file = new File(mydir1+File.separator+filename); 
+		Log.d("file path",file.toString());
+		try {
+			counter++;
+			FileWriter writer = new FileWriter(file);
+			writer.append("X-Coordinates"+"\n");
+			writer.append(xCo.toString());
+			writer.flush();
+			writer.append("\n"+"Y-Coordinates"+"\n");
+			writer.append(yCo.toString());
+			writer.flush();
+			writer.append("\n"+"Pressure"+"\n");
+			writer.append(pressureList.toString());
+			writer.flush();
+			writer.append("\n"+"size"+"\n");
+			writer.append(sizeList.toString());
+			writer.flush();
+			writer.append("\n"+"time"+"\n");
+			writer.append(timeStamp.toString());
+			writer.flush();
+			writer.close();
+			if(counter%10==0) {
+				digit++;
+				counter=0;
+			}
+		} catch (IOException e) {
+			System.out.println("File not created");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+   
+	clearCanvas();
 	}
-	
+
 	public void authenticate() {
 		//Authentication code goes here
 		//Call async task
 	}
+
 }

@@ -1,10 +1,14 @@
 package com.is3av.drawpin;
 
+import java.io.FileNotFoundException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,10 +21,22 @@ public class AttackLogin extends Activity {
 	private DrawingView dv ;   
 	private TextView message;
 	private int count = 0;
+	private char[] character = new char[20];
+	private String pin = "";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.password);
+		System.out.println("sets content");
+		Intent intent = getIntent();
+		String result = intent.getExtras().getString("result");
+		Log.d("String from intent", result);
+		character = result.toCharArray();
+		for(int i=3;i<7;i++) {
+			
+			System.out.println("Index Attack: "+ i + "Character is: "+character[i]);
+			pin += character[i];
+		}
 		dv = (DrawingView) findViewById(R.id.drawview);
 		handleLogin();		
 		handleClear();
@@ -45,14 +61,24 @@ public class AttackLogin extends Activity {
 		public void onClick(View v) {
 			count++;
 			if(count<4) {
-				dv.saveCanvas();
+				try {
+					dv.saveCanvas();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if(count>=3) {
 				loginButton.setText("Login");
 			}
 			if(count==4) {
 			
-			dv.saveCanvas();
+			try {
+				dv.saveCanvas();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			dv.authenticate();
 			}
 		}
@@ -74,7 +100,7 @@ public class AttackLogin extends Activity {
 		switch(id) {
 		case 1:
 			//builder.setMessage("Draw your pin"+"\n"+"One digit at a time");
-			builder.setMessage("Please draw the pin 1234");
+			builder.setMessage("Please draw the pin " + pin);
 			dialog  = builder.create();
 			break;
 

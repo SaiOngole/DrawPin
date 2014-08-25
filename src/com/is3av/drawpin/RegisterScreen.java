@@ -7,23 +7,30 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Spinner;
 
 public class RegisterScreen extends Activity{
 	private Button signUp;
 	private Button goBack;
 	private EditText newUser;
 	private String userN;
-	private TextView warning;
+	
+	private char[] character = new char[20];
+	private char invisibleBit;
+	Spinner genderSpinner;
+	private String gender;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.register);
+		Intent intent = getIntent();
+		String temp = intent.getExtras().getString("result");
+		character = temp.toCharArray();
+		invisibleBit = character[9];
 		setButtons();
 		setTextField();
-		warning = (TextView) findViewById(R.id.warning);
-		
-		warning.setText("Please use a valid email ID"+"\n"+"We will need it for further communication");
+		genderSpinner = (Spinner)findViewById(R.id.genderSpinner);
+		gender = genderSpinner.getSelectedItem().toString();
 	}
 	private void setButtons() {
 		signUp = (Button)findViewById(R.id.signUp);
@@ -40,7 +47,7 @@ public class RegisterScreen extends Activity{
 		@Override
 		public void onClick(View v) {
 			Intent signupIntent = new Intent(RegisterScreen.this,RegPasswordScreen.class);
-			System.out.println("here");
+			signupIntent.putExtra("invisible", character[9]);
 			startActivity(signupIntent);
 			
 		}

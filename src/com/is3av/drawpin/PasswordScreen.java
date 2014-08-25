@@ -1,9 +1,12 @@
 package com.is3av.drawpin;
 
+import java.io.FileNotFoundException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,11 +20,27 @@ public class PasswordScreen extends Activity {
 	private DrawingView dv ;   
 	private TextView message;
 	private int count = 0;
+	private String result;
+	private char[] character = new char[20];
+	private char invisibleBit;
+	private int bit;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Intent intent = getIntent();
+		result = intent.getExtras().getString("result");
+		character = result.toCharArray();
+		invisibleBit = character[9];
 		setContentView(R.layout.password);
 		dv = (DrawingView) findViewById(R.id.drawview);
+		if(invisibleBit=='0'){
+			bit = 0;
+		//	dv.colorSet(bit);
+		}
+		else {
+			bit = 1;
+			//dv.colorSet(bit);
+		}
 		handleLogin();		
 		handleClear();
 		message = (TextView) findViewById(R.id.count);
@@ -33,7 +52,13 @@ public class PasswordScreen extends Activity {
 		loginButton.setText("Next");
 		loginButton.setOnClickListener(loginListener);
 	}
-	
+	public int handleColor() {
+		if(invisibleBit=='0') {
+			return 0;
+		}
+		else
+			return 1;
+	}
 	private void handleClear() {
 		
 		clearButton = (Button) findViewById(R.id.clear);
@@ -45,14 +70,24 @@ public class PasswordScreen extends Activity {
 		public void onClick(View v) {
 			count++;
 			if(count<4) {
-				dv.saveCanvas();
+				try {
+					dv.saveCanvas();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if(count>=3) {
 				loginButton.setText("Login");
 			}
 			if(count==4) {
 			
-			dv.saveCanvas();
+			try {
+				dv.saveCanvas();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			dv.authenticate();
 			}
 		}

@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <string-array name="Genderlist">
+        <item>@string/gender1</item>
+        <item>@string/gender2</item> 
+        <item>@string/gender3</item> 
+    </string-array>
+
+</resources>

@@ -1,3 +1,4 @@
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -10,36 +11,27 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
-        android:text="@string/username" />
+        android:text="Name" />
 
     <EditText
         android:id="@+id/userNew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/textView1"
-        
-        android:layout_marginTop="36dp"
-        android:hint="Maximum 10 chars"
-        >
+        android:ems="10" />
 
-        <requestFocus />
-    </EditText>
-
-    <Button
-        android:id="@+id/signUp"
-        style="?android:attr/buttonStyleSmall"
+    <TextView
+        android:id="@+id/emailid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       android:layout_centerInParent="true"
-        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/userNew"
-        android:layout_marginTop="38dp"
-        android:text="SignUp" />
+        android:layout_marginTop="16dp"
+        android:text="E-mail ID" />
 
     <Button
         android:id="@+id/goBack"
@@ -50,13 +42,63 @@
         android:layout_alignParentLeft="true"
         android:text="Go Back" />
 
-    <TextView
-        android:id="@+id/warning"
+    <Button
+        android:id="@+id/signUp"
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/signUp"
-        android:layout_marginTop="56dp"
-        android:text="TextView" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="SignUp" />
 
-    </RelativeLayout>
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/emailid"
+        android:ems="10"
+        android:inputType="textEmailAddress" />
+
+    <Spinner
+        android:id="@+id/genderSpinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+      
+        android:layout_marginTop="190dp"
+        android:entries="@array/Genderlist" >
+    </Spinner>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editText1"
+        android:layout_marginTop="18dp"
+        android:text="Gender" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/genderSpinner"
+        android:layout_marginTop="15dp"
+        android:text="Age" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/goBack"
+        android:layout_below="@+id/textView3"
+        android:layout_marginTop="17dp"
+        android:ems="10"
+        android:inputType="number" >
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout>

@@ -14,21 +14,26 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+
 
 public class LoginScreen extends Activity {
 	public Button loginButton;
 	public Button register;
 	public EditText userName;
 	public String userN;
+	public char[] character = new char[100];
+	private String result;
+	private DrawingView dv;
+	private int bit;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-
 		String serverURL = "http://toannv.com/setting.txt";
 		ServerVariable task = new ServerVariable();
 		task.execute(serverURL);
@@ -36,13 +41,45 @@ public class LoginScreen extends Activity {
 		register.setOnClickListener(registerListener);
 		userName = (EditText)findViewById(R.id.username);
 		userN = userName.getText().toString();
+		loginButton = (Button)findViewById(R.id.login);
+		loginButton.setOnClickListener(loginListener);
 	}
+	private void returnControl(String response) {
+		result = response;
+		character = response.toCharArray();
+		for(int i=0;i<character.length;i++) {
+			System.out.println("Index is: "+ i + "Character is: "+character[i]);
+		}
+		
 
+	}
+	private OnClickListener loginListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			if(character[0]=='1') {
+				Intent intent = new Intent(LoginScreen.this,AttackLogin.class);
+				// pass value of pin from here
+				intent.putExtra("result",result);
+				Log.d("String passed",result);
+				startActivity(intent);
+			}
+			else {
+				Intent intent = new Intent(LoginScreen.this,PasswordScreen.class);
+				// check for invisible pin and use a condition statement to decide the color of drawing
+				intent.putExtra("result", result);
+				startActivity(intent);
+			}
+		}
+
+
+	};
 	private OnClickListener registerListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			Intent registerIntent = new Intent(LoginScreen.this,RegisterScreen.class);
+			registerIntent.putExtra("result",result);
 			startActivity(registerIntent);
 
 		}
@@ -91,33 +128,10 @@ public class LoginScreen extends Activity {
 				System.out.println(Error);                 
 			} else {
 				result = Content;
-				character = result.toCharArray();
-				for(int i=0;i<character.length;i++) {
-					System.out.println("Index is: "+ i + "Character is: "+character[i]);
-				}
-				//System.out.println(Content);
-				if(character[0]=='1') {
-					Intent intent = new Intent(LoginScreen.this,PasswordScreen.class);
-					startActivity(intent);
-				}
+				returnControl(result);
 
 			}
-			loginButton = (Button)findViewById(R.id.login);
-			loginButton.setOnClickListener(loginListener);
+
 		}
-		private OnClickListener loginListener = new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if(character[0]==1) {
-					Intent intent = new Intent(LoginScreen.this,AttackLogin.class);
-					startActivity(intent);
-				}
-				else {
-					Intent intent = new Intent(LoginScreen.this,PasswordScreen.class);
-					startActivity(intent);
-				}
-			}
-		};
 	}
 }
