@@ -6,5 +6,14 @@
         <item>@string/gender2</item> 
         <item>@string/gender3</item> 
     </string-array>
+    
+    <string-array name="agelist">
+        <item>@string/age1</item>
+        <item>@string/age2</item> 
+        <item>@string/age3</item> 
+        <item>@string/age4</item> 
+        <item>@string/age5</item> 
+        <item>@string/age6</item> 
+    </string-array>
 
 </resources>
